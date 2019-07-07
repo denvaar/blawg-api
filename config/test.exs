@@ -6,13 +6,19 @@ config :blawg_api, BlawgApiWeb.Endpoint,
   http: [port: 4002],
   server: false
 
-# Print only warnings and errors during test
-config :logger, level: :warn
+config :blawg_api,
+  persistance_handler: BlawgApi.MockPersistance
+config :blawg_api,
+  authentication_handler: BlawgApi.MockAuthentication
+config :blawg_api,
+  hmac_key: "secret_key"
 
-# Configure your database
-config :blawg_api, BlawgApi.Repo,
+config :blawg_postgres_db, BlawgPostgresDb.Repo,
   username: "postgres",
   password: "postgres",
-  database: "blawg_api_test",
+  database: "blawg_postgres_db_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
+
+# Print only warnings and errors during test
+config :logger, level: :warn
