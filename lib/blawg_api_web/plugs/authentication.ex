@@ -2,25 +2,39 @@ defmodule BlawgApiWeb.Plugs.Authentication do
   import Plug.Conn
 
   def init(_params) do
+    %{}
   end
 
-  def call(%{params: %{"content" => content, "date" => date, "tags" => tags}} = conn, _params) do
+  def call(%{params: request_params} = conn, params) do
+    authentication_handler = Map.get(
+      params,
+      :authentication_handler,
+      Application.get_env(:blawg_api, :authentication_handler))
 
-    hmac_digest = BlawgApi.HmacAuthentication.digest(date <> content <> tags)
+    hmac_digest =
+      request_params
+      |> stringify_request_params()
+      |> authentication_handler.digest()
 
-    [_proto, hmac_value] =
-      conn
-      |> get_req_header("authorization")
-      |> List.first()
-      |> String.split(" ")
-
-    if Plug.Crypto.secure_compare(hmac_value, hmac_digest) do
+    if authentication_handler.should_permit_access?(conn, hmac_digest) do
       conn
     else
-      conn
-      |> put_status(401)
-      |> Phoenix.Controller.json(%{"message" => "Unauthorized request"})
-      |> halt()
+      give_unauthorized_response(conn)
     end
+  end
+
+  def call(conn, _params) do
+    give_unauthorized_response(conn)
+  end
+
+  defp give_unauthorized_response(conn) do
+    conn
+    |> put_status(401)
+    |> Phoenix.Controller.json(%{"errors" => ["Unauthorized request"]})
+    |> halt()
+  end
+
+  defp stringify_request_params(params) do
+    :erlang.term_to_binary(params)
   end
 end

@@ -7,9 +7,6 @@
 # General application configuration
 use Mix.Config
 
-config :blawg_api,
-  ecto_repos: [BlawgApi.Repo]
-
 # Configures the endpoint
 config :blawg_api, BlawgApiWeb.Endpoint,
   url: [host: "localhost"],
@@ -19,6 +16,12 @@ config :blawg_api, BlawgApiWeb.Endpoint,
 
 config :blawg_api,
   hmac_key: "secret_key"
+
+config :blawg_api,
+  persistance_handler: BlawgPostgresDb
+
+config :blawg_api,
+  authentication_handler: BlawgApi.HmacAuthentication
 
 # Configures Elixir's Logger
 config :logger, :console,

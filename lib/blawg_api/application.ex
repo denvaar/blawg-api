@@ -8,10 +8,8 @@ defmodule BlawgApi.Application do
   def start(_type, _args) do
     # List all child processes to be supervised
     children = [
-      # Start the Ecto repository
-      BlawgApi.Repo,
       # Start the endpoint when the application starts
-      BlawgApiWeb.Endpoint
+      BlawgApiWeb.Endpoint,
       # Starts a worker by calling: BlawgApi.Worker.start_link(arg)
       # {BlawgApi.Worker, arg},
     ]

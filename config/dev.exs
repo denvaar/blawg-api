@@ -13,6 +13,12 @@ config :blawg_api, BlawgApiWeb.Endpoint,
   check_origin: false,
   watchers: []
 
+config :blawg_postgres_db, BlawgPostgresDb.Repo,
+  database: "blawg_postgres_db_repo",
+  username: "postgres",
+  password: "postgres",
+  hostname: "localhost"
+
 # ## SSL Support
 #
 # In order to use HTTPS in development, a self-signed
@@ -46,11 +52,3 @@ config :phoenix, :stacktrace_depth, 20
 
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
-
-# Configure your database
-config :blawg_api, BlawgApi.Repo,
-  username: "postgres",
-  password: "postgres",
-  database: "blawg_api_dev",
-  hostname: "localhost",
-  pool_size: 10

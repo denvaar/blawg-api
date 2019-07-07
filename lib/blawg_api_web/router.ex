@@ -9,6 +9,10 @@ defmodule BlawgApiWeb.Router do
   scope "/api", BlawgApiWeb do
     pipe_through :api
 
-    post "/articles/create", ArticleController, :create
+    resources "/articles", ArticleController,
+      only: [:create, :update, :delete, :index], param: "slug"
+
   end
+
+  get "/*path", BlawgApiWeb.CorsController, :index
 end
