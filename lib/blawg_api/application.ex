@@ -9,7 +9,7 @@ defmodule BlawgApi.Application do
     # List all child processes to be supervised
     children = [
       # Start the endpoint when the application starts
-      BlawgApiWeb.Endpoint,
+      BlawgApiWeb.Endpoint
       # Starts a worker by calling: BlawgApi.Worker.start_link(arg)
       # {BlawgApi.Worker, arg},
     ]

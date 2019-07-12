@@ -10,10 +10,10 @@ defmodule BlawgApiWeb.ArticleControllerTest do
     conn = build_conn()
 
     BlawgApi.MockAuthentication
-    |> expect(:digest, fn(_message) ->
+    |> expect(:digest, fn _message ->
       "x"
     end)
-    |> expect(:should_permit_access?, fn(%Plug.Conn{} = _conn, "x") ->
+    |> expect(:should_permit_access?, fn %Plug.Conn{} = _conn, "x" ->
       true
     end)
 
@@ -22,14 +22,10 @@ defmodule BlawgApiWeb.ArticleControllerTest do
 
   describe "index/2" do
     test "lists articles", %{conn: conn} do
-      article = %{id: 1,
-        slug: "slug",
-        title: "title",
-        content: "content",
-        date_published: nil}
+      article = %{id: 1, slug: "slug", title: "title", content: "content", date_published: nil}
 
       BlawgApi.MockPersistance
-      |> expect(:list_articles, fn() ->
+      |> expect(:list_articles, fn ->
         [struct(Perseus.Article.Article, Keyword.new(article))]
       end)
 
@@ -45,7 +41,7 @@ defmodule BlawgApiWeb.ArticleControllerTest do
   describe "create/2" do
     test "creates a new article and returns slug", %{conn: conn} do
       BlawgApi.MockPersistance
-      |> expect(:create_article, fn(%{"title" => _title, "content" => _content}) ->
+      |> expect(:create_article, fn %{"title" => _title, "content" => _content} ->
         {:ok, %{slug: "test-title"}}
       end)
 
@@ -60,12 +56,10 @@ defmodule BlawgApiWeb.ArticleControllerTest do
     end
 
     test "fails to create article and returns error", %{conn: conn} do
-      expected_errors =
-        %{"content" => ["can't be blank"],
-          "title" => ["can't be blank"]}
+      expected_errors = %{"content" => ["can't be blank"], "title" => ["can't be blank"]}
 
       BlawgApi.MockPersistance
-      |> expect(:create_article, fn(_params) -> {:error, expected_errors} end)
+      |> expect(:create_article, fn _params -> {:error, expected_errors} end)
 
       response =
         conn
@@ -79,7 +73,7 @@ defmodule BlawgApiWeb.ArticleControllerTest do
   describe "update/2" do
     test "updates an existing article and returns slug", %{conn: conn} do
       BlawgApi.MockPersistance
-      |> expect(:update_article, fn("some-title", %{"content" => "updated content"}) ->
+      |> expect(:update_article, fn "some-title", %{"content" => "updated content"} ->
         {:ok, %{slug: "some-title"}}
       end)
 
@@ -97,7 +91,7 @@ defmodule BlawgApiWeb.ArticleControllerTest do
       expected_errors = %{"content" => ["can't be blank"]}
 
       BlawgApi.MockPersistance
-      |> expect(:update_article, fn(_slug, _article_params) ->
+      |> expect(:update_article, fn _slug, _article_params ->
         {:error, expected_errors}
       end)
 
@@ -116,14 +110,13 @@ defmodule BlawgApiWeb.ArticleControllerTest do
       slug = "some-title"
 
       BlawgApi.MockPersistance
-      |> expect(:update_article, fn(^slug, ^article_params) ->
+      |> expect(:update_article, fn ^slug, ^article_params ->
         :not_found
       end)
 
       response =
         conn
-        |> patch(Routes.article_path(conn, :update, slug,
-          %{"article" => article_params}))
+        |> patch(Routes.article_path(conn, :update, slug, %{"article" => article_params}))
         |> json_response(404)
 
       assert response == %{"errors" => ["article not found"]}
@@ -135,7 +128,7 @@ defmodule BlawgApiWeb.ArticleControllerTest do
       slug = "a-slug"
 
       BlawgApi.MockPersistance
-      |> expect(:delete_article, fn(^slug) ->
+      |> expect(:delete_article, fn ^slug ->
         :ok
       end)
 
@@ -151,7 +144,7 @@ defmodule BlawgApiWeb.ArticleControllerTest do
       slug = "a-slug"
 
       BlawgApi.MockPersistance
-      |> expect(:delete_article, fn(^slug) ->
+      |> expect(:delete_article, fn ^slug ->
         :not_found
       end)
 

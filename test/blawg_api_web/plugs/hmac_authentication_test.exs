@@ -10,8 +10,7 @@ defmodule BlawgApiWeb.Plugs.AuthenticationTest do
   end
 
   test "allows a valid message through",
-  %{plug_params: plug_params, create_article_path: create_article_path} do
-
+       %{plug_params: plug_params, create_article_path: create_article_path} do
     article_params = %{"title" => "yolo", "content" => "heyo"}
     valid_hash = "19fe6847f458e8e19509340ec432ae2b7957f6fc73bae9e28ff21d7f4af563c8"
 
@@ -24,8 +23,7 @@ defmodule BlawgApiWeb.Plugs.AuthenticationTest do
   end
 
   test "does not allow an invalid message through",
-  %{plug_params: plug_params, create_article_path: create_article_path} do
-
+       %{plug_params: plug_params, create_article_path: create_article_path} do
     article_params = %{"title" => "changed", "content" => "heyo"}
     valid_hash = "f066e73a7b325d35f0249e8c6c5cc5ea53a3fe024efe1d9e0edec487389f7d1b"
 
@@ -38,8 +36,7 @@ defmodule BlawgApiWeb.Plugs.AuthenticationTest do
   end
 
   test "does not allow an invalid hmac hash through",
-  %{plug_params: plug_params, create_article_path: create_article_path} do
-
+       %{plug_params: plug_params, create_article_path: create_article_path} do
     article_params = %{"title" => "changed", "content" => "heyo"}
     invalid_hash = "a066e73a7b325d35f0249e8c6c5cc5ea53a3fe024efe1d9e0edec487389f7d1b"
 
@@ -52,8 +49,7 @@ defmodule BlawgApiWeb.Plugs.AuthenticationTest do
   end
 
   test "not allowed through when no authorization request header present",
-  %{plug_params: plug_params, create_article_path: create_article_path} do
-
+       %{plug_params: plug_params, create_article_path: create_article_path} do
     article_params = %{"title" => "changed", "content" => "heyo"}
 
     conn =
@@ -64,8 +60,7 @@ defmodule BlawgApiWeb.Plugs.AuthenticationTest do
   end
 
   test "not allowed through with a malformed authorization request header",
-  %{plug_params: plug_params, create_article_path: create_article_path} do
-
+       %{plug_params: plug_params, create_article_path: create_article_path} do
     article_params = %{"title" => "changed", "content" => "heyo"}
 
     conn =

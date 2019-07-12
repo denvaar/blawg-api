@@ -9,7 +9,13 @@ defmodule BlawgApi.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      dialyzer: [
+        flags: [:unmatched_returns, :error_handling, :race_conditions, :underspecs],
+        paths: [
+          "_build/dev/lib/blawg_api/ebin"
+        ]
+      ]
     ]
   end
 
@@ -38,7 +44,8 @@ defmodule BlawgApi.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:blawg_postgres_db, git: "https://github.com/denvaar/blawg_postgres_db.git"},
-      {:mox, "~> 0.5", only: :test}
+      {:mox, "~> 0.5", only: :test},
+      {:dialyxir, "~> 1.0.0-rc.6", only: [:dev], runtime: false}
     ]
   end
 end

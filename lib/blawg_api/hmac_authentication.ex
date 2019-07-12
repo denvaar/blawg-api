@@ -3,8 +3,7 @@ defmodule BlawgApi.HmacAuthentication do
 
   @impl BlawgApi.Authentication
   def digest(message) do
-    :crypto.hmac(:sha256,
-      Application.get_env(:blawg_api, :hmac_key), message)
+    :crypto.hmac(:sha256, Application.get_env(:blawg_api, :hmac_key), message)
     |> Base.encode16()
     |> String.downcase()
   end

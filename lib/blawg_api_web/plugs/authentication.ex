@@ -6,10 +6,12 @@ defmodule BlawgApiWeb.Plugs.Authentication do
   end
 
   def call(%{params: request_params} = conn, params) do
-    authentication_handler = Map.get(
-      params,
-      :authentication_handler,
-      Application.get_env(:blawg_api, :authentication_handler))
+    authentication_handler =
+      Map.get(
+        params,
+        :authentication_handler,
+        Application.get_env(:blawg_api, :authentication_handler)
+      )
 
     hmac_digest =
       request_params
