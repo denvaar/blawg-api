@@ -9,5 +9,11 @@ otp_release:
 script:
   - mix do local.hex --force
   - mix deps.get
+  - mix format --check-formatted
   - mix test
+  - travis_wait mix dialyzer --halt-exit-status
+
+cache:
+  directories:
+    - priv/plts
 

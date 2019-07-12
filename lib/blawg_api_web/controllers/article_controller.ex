@@ -6,7 +6,7 @@ defmodule BlawgApiWeb.ArticleController do
   def index(conn, _params) do
     articles =
       Persistance.list_articles()
-      |> Enum.map(fn(article) ->
+      |> Enum.map(fn article ->
         Map.from_struct(article)
       end)
 
@@ -38,6 +38,7 @@ defmodule BlawgApiWeb.ArticleController do
         conn
         |> put_status(400)
         |> json(%{errors: errors})
+
       :not_found ->
         conn
         |> put_status(404)

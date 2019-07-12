@@ -10,8 +10,8 @@ defmodule BlawgApiWeb.Router do
     pipe_through :api
 
     resources "/articles", ArticleController,
-      only: [:create, :update, :delete, :index], param: "slug"
-
+      only: [:create, :update, :delete, :index],
+      param: "slug"
   end
 
   get "/*path", BlawgApiWeb.CorsController, :index

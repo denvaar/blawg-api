@@ -8,8 +8,10 @@ config :blawg_api, BlawgApiWeb.Endpoint,
 
 config :blawg_api,
   persistance_handler: BlawgApi.MockPersistance
+
 config :blawg_api,
   authentication_handler: BlawgApi.MockAuthentication
+
 config :blawg_api,
   hmac_key: "secret_key"
 
