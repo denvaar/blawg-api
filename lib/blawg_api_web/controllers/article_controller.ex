@@ -15,6 +15,20 @@ defmodule BlawgApiWeb.ArticleController do
     |> render("index.json", articles: articles)
   end
 
+  def show(conn, %{"slug" => slug}) do
+    case Persistance.get_article(slug) do
+      nil ->
+        conn
+        |> put_status(404)
+        |> json(%{errors: ["Article not found"]})
+
+      article ->
+        conn
+        |> put_status(:ok)
+        |> json(%{article: %{title: article.title, content: article.content}})
+    end
+  end
+
   def create(conn, params) do
     with {:ok, %{slug: slug}} <- Persistance.create_article(params) do
       conn
