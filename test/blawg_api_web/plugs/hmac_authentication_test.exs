@@ -12,7 +12,37 @@ defmodule BlawgApiWeb.Plugs.AuthenticationTest do
   test "allows a valid message through",
        %{plug_params: plug_params, create_article_path: create_article_path} do
     article_params = %{"title" => "yolo", "content" => "heyo"}
-    valid_hash = "19fe6847f458e8e19509340ec432ae2b7957f6fc73bae9e28ff21d7f4af563c8"
+    valid_hash = "18d35e75944596b53a22c4af1427bf9c7c7a059e8a85f33a2407c2b9c03cc0f8"
+
+    conn =
+      Plug.Test.conn(:post, create_article_path, article_params)
+      |> put_req_header("authorization", "hmac #{valid_hash}")
+      |> BlawgApiWeb.Plugs.Authentication.call(plug_params)
+
+    refute conn.status == 401
+  end
+
+  test "allows a valid message through with nested params and numbers",
+       %{plug_params: plug_params, create_article_path: create_article_path} do
+    article_params = %{"article" => %{"title" => "yolo", "content" => 1}}
+    valid_hash = "1759233acc01327de179509c2f30b21ae61efa9422f7f5945bba8b17131f7bd3"
+
+    conn =
+      Plug.Test.conn(:post, create_article_path, article_params)
+      |> put_req_header("authorization", "hmac #{valid_hash}")
+      |> BlawgApiWeb.Plugs.Authentication.call(plug_params)
+
+    refute conn.status == 401
+  end
+
+  test "allows a valid message through with crazy params",
+       %{plug_params: plug_params, create_article_path: create_article_path} do
+    article_params = %{
+      "article" => %{"title" => "yolo", "content" => 1},
+      "z" => %{"crap" => %{"nested" => "ok"}}
+    }
+
+    valid_hash = "26157f2b2d06ecd7e7961a953557a1ed43546aeb375d509e53456e2e37f73d2f"
 
     conn =
       Plug.Test.conn(:post, create_article_path, article_params)

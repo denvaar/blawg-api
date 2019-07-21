@@ -37,6 +37,28 @@ defmodule BlawgApiWeb.Plugs.Authentication do
   end
 
   defp stringify_request_params(params) do
-    :erlang.term_to_binary(params)
+    # alphabetize all the keys and values of the
+    # request params to check the hmac digest.
+
+    params
+    |> Map.to_list()
+    |> flatten([])
+    |> Enum.sort()
+    |> Enum.join()
+  end
+
+  defp flatten([], result), do: result
+
+  defp flatten([{key, value} | remaining], result) when is_map(value) do
+    value
+    |> Map.to_list()
+    |> Kernel.++(remaining)
+    |> flatten([key | result])
+  end
+
+  defp flatten([{key, value}], result), do: [key | [value | result]]
+
+  defp flatten([{key, value} | remaining], result) do
+    flatten(remaining, [key | [value | result]])
   end
 end
