@@ -82,7 +82,7 @@ defmodule BlawgApiWeb.ArticleControllerTest do
       response =
         conn
         |> patch(Routes.article_path(conn, :update, "some-title", params))
-        |> json_response(204)
+        |> json_response(200)
 
       assert response == %{"article" => %{"slug" => "some-title"}}
     end

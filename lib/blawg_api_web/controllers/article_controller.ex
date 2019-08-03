@@ -45,7 +45,7 @@ defmodule BlawgApiWeb.ArticleController do
   def update(conn, %{"slug" => slug, "article" => article} = _params) do
     with {:ok, %{slug: slug}} <- Persistance.update_article(slug, article) do
       conn
-      |> put_status(204)
+      |> put_status(200)
       |> render("show.json", article: %{slug: slug})
     else
       {:error, errors} ->

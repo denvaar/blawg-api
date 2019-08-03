@@ -5,7 +5,7 @@ defmodule BlawgApiWeb.Plugs.Authentication do
     %{}
   end
 
-  def call(%{params: request_params} = conn, params) do
+  def call(%{body_params: request_params} = conn, params) do
     authentication_handler =
       Map.get(
         params,
