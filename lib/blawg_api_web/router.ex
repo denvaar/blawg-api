@@ -1,5 +1,6 @@
 defmodule BlawgApiWeb.Router do
   use BlawgApiWeb, :router
+  @dialyzer {:nowarn_function, __checks__: 0}
 
   pipeline :api do
     plug :accepts, ["json"]
@@ -7,6 +8,17 @@ defmodule BlawgApiWeb.Router do
 
   pipeline :api_write do
     plug BlawgApiWeb.Plugs.Authentication
+  end
+
+  scope "/graphql" do
+    forward "/playground", Absinthe.Plug.GraphiQL,
+      schema: BlawgApi.GraphQL.Schema,
+      interface: :simple,
+      json_codec: Jason
+
+    forward "/", Absinthe.Plug,
+      schema: BlawgApi.GraphQL.Schema,
+      json_codec: Jason
   end
 
   scope "/api", BlawgApiWeb do
