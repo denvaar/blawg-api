@@ -1,9 +1,12 @@
 defmodule BlawgApiWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :blawg_api
+  use Absinthe.Phoenix.Endpoint
 
   socket "/socket", BlawgApiWeb.UserSocket,
     websocket: true,
     longpoll: false
+
+  plug CORSPlug
 
   # Serve at "/" the static files from "priv/static" directory.
   #
