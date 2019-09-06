@@ -4,6 +4,7 @@ defmodule BlawgApi.GraphQL.ContentTypes do
   object :article do
     field(:content, :string)
     field(:date_published, :string)
+    field(:summary, :string)
     field(:id, :id)
     field(:slug, :string)
     field(:title, :string)
